@@ -31,6 +31,7 @@ if __name__ == "__main__":
     
     import time
     import matplotlib.pyplot as plt
+    import numpy as np
     
     time_sta = time.time()
     # shot_no = 255144
@@ -43,7 +44,7 @@ if __name__ == "__main__":
     line_ch = '2' 
     #line_ch = 'n2_1ps'
     camera_dict = camera_reader(shot_no, line_ch, frame_tgt, num_frames, flg_rot)
-    camera_dict['imgs'][0,30,25] = 100
+    camera_dict['imgs'][0,30,25] = np.max(camera_dict['imgs'])
     plt.imshow(camera_dict['imgs'][0,:,:]) # [frame, x, z]
     # plt.plot(camera_dict['imgs'][:,55,130])
     plt.show
