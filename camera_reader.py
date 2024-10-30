@@ -24,30 +24,40 @@ def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
     # config and paths
     config_dict = read_path_info.read_path_info()
     tiff_dir = config_dict['tiff_dir']
+    conv_dict = read_conv_info.read_conv_info(shot_no, tiff_dir)
     
-    # read tiff and convert info
-    try:
-        conv_dict = read_conv_info.read_conv_info(shot_no, tiff_dir)
-        frame_size_x = int(conv_dict['frame_size_x'])
-        frame_size_y = int(conv_dict['frame_size_y'])
-        dtype = np.uint16  # Assuming 16-bit TIFF images; modify if different
-        if num_frames == 0:
-            num_frames = int(conv_dict['bottom_frame']) - int(conv_dict['top_frame']) - frame_tgt  # Load all remaining frames
-        img_array = np.memmap('img_array.dat', dtype=dtype, mode='w+', shape=(num_frames, frame_size_y, frame_size_x))
+    if num_frames == 0:
+        num_frames = int(conv_dict['bottom_frame']) - int(conv_dict['top_frame']) - frame_tgt  # Load all remaining frames
+    
+    # Initialize an empty array for the memmap
+    first_frame = load_tiff.load_tiff(shot_no, tiff_dir, frame_tgt, 1)
+    first_frame, tra_dict, coeff = transform_image.transform_image(shot_no, line_ch, tiff_dir, first_frame, flg_rot)
+    
+    memmap_shape = (num_frames,) + first_frame.shape
+    memmap_filename = 'trimmed_image.dat'
+    trimmed_memmap = np.memmap(memmap_filename, dtype='float32', mode='w+', shape=memmap_shape)
+    
+    # Process each frame
+    for i in tqdm(range(frame_tgt, frame_tgt + num_frames), desc="Loading frames..."):
+        try:
+            img_array = load_tiff.load_tiff(shot_no, tiff_dir, i, 1)
+        except FileNotFoundError as e:
+            print(f"Error: {e}")
+            return None
         
-        for i in tqdm(range(frame_tgt, frame_tgt + num_frames), desc="Loading frames..."):
-            img_array[i - frame_tgt] = load_tiff.load_tiff(shot_no, tiff_dir, i, 1)
-    except FileNotFoundError as e:
-        print(f"Error: {e}")
-        return None
+        # Transform the image
+        img_array, tra_dict, coeff = transform_image.transform_image(shot_no, line_ch, tiff_dir, img_array, flg_rot)
+        
+        # Save the trimmed image to the memmap
+        trimmed_memmap[i - frame_tgt] = img_array
 
-    # process raw image
-    img_array, tra_dict, coeff = transform_image.transform_image(shot_no, line_ch, tiff_dir, img_array, flg_rot)
-    
-    camera_dict = {'imgs': img_array, 'coeff': coeff, 'frame_start': frame_tgt}
+    # Create a dictionary with memmap file path
+    camera_dict = {'memmap_file': memmap_filename, 'coeff': coeff, 'frame_start': frame_tgt}
     camera_dict.update(conv_dict)
     camera_dict.update(tra_dict)
     camera_dict.update(config_dict)
+    
+    camera_dict['data_size'] = (num_frames, *camera_dict['trimmed_size'])
     
     return camera_dict
     
@@ -60,13 +70,19 @@ if __name__ == "__main__":
     
     time_sta = time.time()
     shot_no = 256221
-    frame_tgt = 0
-    num_frames = 0
-    flg_rot = False
-    line_ch = '2'
-    
+    frame_tgt=0
+    num_frames=0
+    flg_rot=False
+    line_ch = '2' 
     camera_dict = camera_reader(shot_no, line_ch, frame_tgt, num_frames, flg_rot)
-    camera_dict['imgs'][0,30,25] = np.max(camera_dict['imgs'])
-    plt.imshow(camera_dict['imgs'][0,:,:]) # [frame, x, z]
+    
+    # Load and display the saved memmap
+    if camera_dict:
+        memmap_file = camera_dict['memmap_file']
+        shape=(camera_dict['data_size'])
+        trimmed_memmap = np.memmap(memmap_file, dtype=np.float32, mode='r', shape=(camera_dict['data_size']))  # Adjust dtype and shape as per actual data
+        plt.imshow(trimmed_memmap[0,:,:]) # [frame, x, z]
+        plt.show()
+    
     time_end = time.time()
     print('Time spent: ' + str(time_end-time_sta) + ' (s)')

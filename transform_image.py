@@ -32,6 +32,9 @@ def transform_image(shot_no, line_ch, tiff_dir, img_array, flg_rot):
     #%% Coeff
     coeff = read_coeff_info.read_coeff_info(shot_no, line_ch, tiff_dir)
     img_array = img_array*coeff
+    
+    #%% Update the dict
+    tra_dict['trimmed_size'] = img_array[0].shape
       
     #%% Return
     return img_array, tra_dict, coeff
