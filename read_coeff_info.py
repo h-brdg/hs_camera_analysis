@@ -14,7 +14,7 @@ def search_section(shot_no, search_ini):
         except: pass
     return tgt_section
 
-def read_coeff_info(shot_no, line_type, tiff_dir):
+def read_coeff_info(shot_no, line_ch, tiff_dir):
     
     #%% Read Params
     cam_params = read_conv_info.read_conv_info(shot_no, tiff_dir)
@@ -36,23 +36,23 @@ def read_coeff_info(shot_no, line_type, tiff_dir):
         shutter_coeff = 1 #temp
 
     # Camera relative response coefficient
-    if line_type == "n2_1ps": # CH4
+    if line_ch == "4": # CH4
         #response_coeff = 1/(0.535*0.75)
         #response_coeff = 1 / 12.79
         response_rate = coeff_ini[info_sect]['response_rate_ch4']
-    elif line_type == "n_atom": # CH3
+    elif line_ch == "3": # CH3
         #response_coeff = 1/(0.119*1)
         #response_coeff = 1 / 78.63
         response_rate = coeff_ini[info_sect]['response_rate_ch3']
-    elif line_type == "h_beta": # CH2
+    elif line_ch == "2": # CH2
         #response_coeff = 1/(0.881*1)
         #response_coeff = 1 / 25.28
         response_rate = coeff_ini[info_sect]['response_rate_ch2']
-    elif line_type == "h_alpha": # CH1, ND Filter OD=0.8
+    elif line_ch == "1": # CH1, ND Filter OD=0.8
         #response_coeff = 1/(0.850*pow(10, -0.8)*0.75)
         #response_coeff = 1 / 2.57
         response_rate = coeff_ini[info_sect]['response_rate_ch1']
-    elif line_type == "4_lines":
+    elif line_ch == "all":
         #response_coeff = 1
         response_rate = coeff_ini[info_sect]['response_rate']
       
@@ -65,6 +65,6 @@ def read_coeff_info(shot_no, line_type, tiff_dir):
 #%% Test
 if __name__ == "__main__":
     shot_no = 252930
-    line_type = 'h_alpha'
+    line_ch = '1'
     tiff_dir = '/media/satoshi/SSD-ST/PRC/Data/Camera/tiff'
-    print('coeff: ' + str(read_coeff_info(shot_no, line_type, tiff_dir)))
+    print('coeff: ' + str(read_coeff_info(shot_no, line_ch, tiff_dir)))
