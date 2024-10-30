@@ -35,7 +35,9 @@ def read_conv_info(shot_no, tiff_dir):
                    'frame_size_x': 0,
                    'frame_size_y': 0,
                    'shutter_speed': 0,
-                   'sensor_filter': 0
+                   'sensor_filter': 0,
+                   'top_frame': 0,
+                   'bottom_frame': 0
                    }
     try:
         params_dict['frame_rate'] = get_params(lines_strip, 'Frame_Rate')
@@ -78,6 +80,12 @@ def read_conv_info(shot_no, tiff_dir):
         #print('Read Frame_Rate')
     except:
             print('Problem Reading Sensor Filter')
+            
+    try:
+        params_dict['top_frame'] = get_params(lines_strip, 'TopFrame')
+        params_dict['bottom_frame'] = get_params(lines_strip, 'BottomFrame')
+    except:
+            print('Problem Reading Frames')
     
     #print('Read params from ' + str(shot_no) + '_tif.txt: \n' + str(params_dict))
     return params_dict

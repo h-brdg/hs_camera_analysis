@@ -4,6 +4,8 @@ import load_tiff
 import read_conv_info
 import transform_image 
 import read_path_info
+import numpy as np
+from tqdm import tqdm
 
 def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
     """
@@ -25,17 +27,22 @@ def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
     
     # read tiff and convert info
     try:
-        img_array = load_tiff.load_tiff(shot_no, tiff_dir, frame_tgt, num_frames)
+        conv_dict = read_conv_info.read_conv_info(shot_no, tiff_dir)
+        frame_size_x = int(conv_dict['frame_size_x'])
+        frame_size_y = int(conv_dict['frame_size_y'])
+        dtype = np.uint16  # Assuming 16-bit TIFF images; modify if different
+        if num_frames == 0:
+            num_frames = int(conv_dict['bottom_frame']) - int(conv_dict['top_frame']) - frame_tgt  # Load all remaining frames
+        img_array = np.memmap('img_array.dat', dtype=dtype, mode='w+', shape=(num_frames, frame_size_y, frame_size_x))
+        
+        for i in tqdm(range(frame_tgt, frame_tgt + num_frames), desc="Loading frames..."):
+            img_array[i - frame_tgt] = load_tiff.load_tiff(shot_no, tiff_dir, i, 1)
     except FileNotFoundError as e:
         print(f"Error: {e}")
         return None
 
-    conv_dict = read_conv_info.read_conv_info(shot_no, tiff_dir)
-    
     # process raw image
     img_array, tra_dict, coeff = transform_image.transform_image(shot_no, line_ch, tiff_dir, img_array, flg_rot)
-    
-    #print(img_array.shape)
     
     camera_dict = {'imgs': img_array, 'coeff': coeff, 'frame_start': frame_tgt}
     camera_dict.update(conv_dict)
@@ -52,21 +59,14 @@ if __name__ == "__main__":
     import numpy as np
     
     time_sta = time.time()
-    # shot_no = 255144
-    shot_no = 255817
-    # shot_no = 255820
-    frame_tgt=3000
-    num_frames=2
-    flg_rot=False
-    # flg_rot=True
-    line_ch = '2' 
-    #line_ch = 'n2_1ps'
+    shot_no = 256221
+    frame_tgt = 0
+    num_frames = 0
+    flg_rot = False
+    line_ch = '2'
+    
     camera_dict = camera_reader(shot_no, line_ch, frame_tgt, num_frames, flg_rot)
     camera_dict['imgs'][0,30,25] = np.max(camera_dict['imgs'])
     plt.imshow(camera_dict['imgs'][0,:,:]) # [frame, x, z]
-    # plt.plot(camera_dict['imgs'][:,55,130])
-    # print(camera_dict['imgs'].shape)
-    # print(camera_dict['imgs'][2])
     time_end = time.time()
     print('Time spent: ' + str(time_end-time_sta) + ' (s)')
-    #print(camera_dict['frame_rate'])
