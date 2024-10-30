@@ -65,7 +65,6 @@ if __name__ == "__main__":
     camera_dict['imgs'][0,30,25] = np.max(camera_dict['imgs'])
     plt.imshow(camera_dict['imgs'][0,:,:]) # [frame, x, z]
     # plt.plot(camera_dict['imgs'][:,55,130])
-    plt.show
     # print(camera_dict['imgs'].shape)
     # print(camera_dict['imgs'][2])
     time_end = time.time()
