@@ -9,7 +9,7 @@ def read_path_info():
         config_dict = {'data_dir': config_ini['Paths']['data_dir'],
                        'tiff_dir': config_ini['Paths']['tiff_dir'],
                        'module_dir': config_ini['Paths']['module_dir'],
-                       'analysis_dir': config_ini['Paths']['analysis_dir']}
+                       'result_dir': config_ini['Paths']['result_dir']}
     except:
         print('Problem reading camera_config.ini')
         config_dict = {}

@@ -28,7 +28,7 @@ def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
         img_array = load_tiff.load_tiff(shot_no, tiff_dir, frame_tgt, num_frames)
     except FileNotFoundError as e:
         print(f"Error: {e}")
-    return None
+        return None
 
     conv_dict = read_conv_info.read_conv_info(shot_no, tiff_dir)
     
