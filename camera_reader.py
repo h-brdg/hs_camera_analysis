@@ -6,12 +6,30 @@ import transform_image
 import read_path_info
 
 def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
+    """
+    Reads and processes images from the camera.
+
+    Parameters:
+    shot_no (int): Shot number.
+    line_ch (str): Line channel '1' - '4' and 'all'.
+    frame_tgt (int): Target frame number. Default is 0: the initial frame.
+    num_frames (int): Number of frames to read. Default is 0: everything.
+    flg_rot (bool): Flag to indicate if rotation is needed. Default is False.
+
+    Returns:
+    dict: A dictionary containing processed image data and metadata.
+    """
     # config and paths
     config_dict = read_path_info.read_path_info()
     tiff_dir = config_dict['tiff_dir']
     
     # read tiff and convert info
-    img_array = load_tiff.load_tiff(shot_no, tiff_dir, frame_tgt, num_frames)
+    try:
+        img_array = load_tiff.load_tiff(shot_no, tiff_dir, frame_tgt, num_frames)
+    except FileNotFoundError as e:
+        print(f"Error: {e}")
+    return None
+
     conv_dict = read_conv_info.read_conv_info(shot_no, tiff_dir)
     
     # process raw image
