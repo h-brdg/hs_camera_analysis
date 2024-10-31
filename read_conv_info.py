@@ -93,7 +93,9 @@ def read_conv_info(shot_no, tiff_dir):
 
 #%%
 if __name__ == "__main__":
+    import read_path_info
     shot_no = 255704
     #shot_no = 252930
-    tiff_dir = '/media/satoshi/SSD-ST/PRC/Data/Camera/tiff'
+    config_dict = read_path_info.read_path_info()
+    tiff_dir = config_dict['tiff_dir']
     print(read_conv_info(shot_no, tiff_dir))

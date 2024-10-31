@@ -64,7 +64,9 @@ def read_coeff_info(shot_no, line_ch, tiff_dir):
 
 #%% Test
 if __name__ == "__main__":
+    import read_path_info
     shot_no = 252930
     line_ch = '1'
-    tiff_dir = '/media/satoshi/SSD-ST/PRC/Data/Camera/tiff'
+    config_dict = read_path_info.read_path_info()
+    tiff_dir = config_dict['tiff_dir']
     print('coeff: ' + str(read_coeff_info(shot_no, line_ch, tiff_dir)))

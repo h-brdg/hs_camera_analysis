@@ -38,10 +38,12 @@ def load_tiff(shot_no, tiff_dir, frame_tgt=0, num_frames=0):
 #%% Test
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
+    import read_path_info
     shot_no = 256221
     frame_tgt=3000
     num_frames=1
-    tiff_dir = '/media/satoshi/SSD-ST/PRC/Data/Camera/tiff'
+    config_dict = read_path_info.read_path_info()
+    tiff_dir = config_dict['tiff_dir']
     img_array = load_tiff(shot_no, tiff_dir, frame_tgt, num_frames)
     #img_array = tiff_reader(shot_no, tiff_dir)
     print(img_array.shape)

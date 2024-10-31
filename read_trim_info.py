@@ -44,8 +44,10 @@ def read_trim_info(shot_no, line_type, tiff_dir):
 
 #%% Test
 if __name__ == "__main__":
+    import read_path_info
     shot_no = 252930
     line_ch= 'all'
-    tiff_dir = '/media/satoshi/SSD-ST/PRC/Data/Camera/tiff'
-    print('tra_dict: ' + str(read_trim_info(shot_no, line_type, tiff_dir)))
+    config_dict = read_path_info.read_path_info()
+    tiff_dir = config_dict['tiff_dir']
+    print('tra_dict: ' + str(read_trim_info(shot_no, line_ch, tiff_dir)))
 
