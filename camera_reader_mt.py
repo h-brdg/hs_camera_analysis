@@ -1,7 +1,7 @@
 import load_tiff
 import read_conv_info
 import transform_image 
-import read_path_info
+import read_config_info
 import numpy as np
 from tqdm import tqdm
 import concurrent.futures
@@ -17,7 +17,7 @@ def process_frame(shot_no, tiff_dir, i, line_ch, flg_rot):
         return None
 
 def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
-    config_dict = read_path_info.read_path_info()
+    config_dict = read_config_info.read_config_info()
     tiff_dir = config_dict['tiff_dir']
     conv_dict = read_conv_info.read_conv_info(shot_no, tiff_dir)
     
@@ -29,7 +29,8 @@ def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
     frame_shape = first_frame[0].shape
     estimated_size_gb = (num_frames * frame_shape[0] * frame_shape[1] * 4) / (1024 ** 3)
 
-    if estimated_size_gb > 8:
+    # if True:   # For testing
+    if estimated_size_gb > int(config_dict['mem_limit_size']):
         memmap_filename = 'trimmed_image.dat'
         trimmed_memmap = np.memmap(memmap_filename, dtype='float32', mode='w+', shape=(num_frames,) + frame_shape)
         camera_data = trimmed_memmap

@@ -64,9 +64,9 @@ def read_coeff_info(shot_no, line_ch, tiff_dir):
 
 #%% Test
 if __name__ == "__main__":
-    import read_path_info
+    import read_config_info
     shot_no = 252930
     line_ch = '1'
-    config_dict = read_path_info.read_path_info()
+    config_dict = read_config_info.read_config_info()
     tiff_dir = config_dict['tiff_dir']
     print('coeff: ' + str(read_coeff_info(shot_no, line_ch, tiff_dir)))
