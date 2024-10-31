@@ -16,7 +16,7 @@ def process_frame(shot_no, tiff_dir, i, line_ch, flg_rot):
         print(f"Error: {e}")
         return None
 
-def camera_reader_mt(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
+def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
     config_dict = read_path_info.read_path_info()
     tiff_dir = config_dict['tiff_dir']
     conv_dict = read_conv_info.read_conv_info(shot_no, tiff_dir)
