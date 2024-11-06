@@ -7,7 +7,6 @@ import mpl_toolkits.axes_grid1
 from tqdm import tqdm
 
 from camera_reader_mt import camera_reader
-import read_config_info
 from calc_int import calc_int
 # import hampel_filter
 

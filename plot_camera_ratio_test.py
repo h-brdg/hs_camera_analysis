@@ -93,8 +93,8 @@ if __name__ == "__main__":
     # num_frames=8000
     # line_ch_li = [('1', '2')]; (vmin,vmax) = (0,30)
     
-    frame_tgt=8000
-    num_frames=0
+    # frame_tgt=8000
+    # num_frames=0
     # line_ch_li = [('1', '4')]; (vmin,vmax) = (0,30)
     
     for shot_no in shot_li:
