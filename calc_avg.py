@@ -62,7 +62,7 @@ def calc_avg(shot_no, line_ch, frame_tgt=0, num_frames=0, avg_time=10):
 if __name__ == "__main__":
     import time
     import matplotlib.pyplot as plt
-    
+    time_sta = time.time()
     shot_no = 256221
     line_ch = '1'
     # line_ch = ('1','2')
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     # num_frames = 0
     # avg_time = 10
     
-    frame_tgt = 11500
+    frame_tgt = 11700
     num_frames = 0
     avg_time = 0.5
     
@@ -93,3 +93,6 @@ if __name__ == "__main__":
         plt.suptitle(f"Averaged Frames for Shot {shot_no}", fontsize=16)
         plt.subplots_adjust(top=0.9)
         plt.show()
+        
+    time_end = time.time()
+    print('Time spent: ' + str(time_end-time_sta) + ' (s)')
