@@ -29,8 +29,8 @@ def calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames):
     estimated_size_gb = (camera_dict_numer['data'].size * 4) / (1024 ** 3)
     # print('Estimated size of the data: ' + str(estimated_size_gb) + 'GB')
 
-    if True:   # For testing
-    # if estimated_size_gb > int(camera_dict_numer['mem_limit_size']):
+    # if True:   # For testing
+    if estimated_size_gb > int(camera_dict_numer['mem_limit_size']):
         memmap_filename = 'ratio_data.dat'
         trimmed_memmap = np.memmap(memmap_filename, dtype='float32', mode='w+', shape=camera_dict_numer['data'].shape)
         camera_ratio_data = trimmed_memmap
