@@ -49,7 +49,7 @@ if __name__ == "__main__":
     shot_li = [256221]
     frame_tgt=11000
     num_frames=1
-    line_ch_li = ('4', '2')
+    line_ch_li = ['4', '2']
     for shot_no in shot_li:
         for line_ch in line_ch_li:
             camera_dict_int = calc_int(shot_no, line_ch, frame_tgt, num_frames)

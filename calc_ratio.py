@@ -35,16 +35,16 @@ def calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames):
         
 #%% Return the dict    
     
-    # camera_ratio_dict = {key:value for key, value in camera_dict_numer.items() if not key == 'data'}
-    # camera_ratio_dict['data'] = ratio_array
+    # camera_dict_ratio = {key:value for key, value in camera_dict_numer.items() if not key == 'data'}
+    # camera_dict_ratio['data'] = ratio_array
     # exclude_key_list = ('data', 'top_frame', 'bottom_frame', 'module_dir', 'result_dir')
-    # camera_ratio_dict.update({str(key + '_denom'): value for key, value in camera_dict_denom.items() if not key in exclude_key_list})
+    # camera_dict_ratio.update({str(key + '_denom'): value for key, value in camera_dict_denom.items() if not key in exclude_key_list})
 
-    camera_ratio_dict = {key:value for key, value in camera_dict_numer.items() if not key == 'data'}
-    camera_ratio_dict.update({str(key + '_numer'): value for key, value in camera_dict_numer.items() if not key == 'data'})
-    camera_ratio_dict.update({str(key + '_denom'): value for key, value in camera_dict_denom.items() if not key == 'data'})
-    camera_ratio_dict['data'] = ratio_array
-    return camera_ratio_dict
+    camera_dict_ratio = {key:value for key, value in camera_dict_numer.items() if not key == 'data'}
+    camera_dict_ratio.update({str(key + '_numer'): value for key, value in camera_dict_numer.items() if not key == 'data'})
+    camera_dict_ratio.update({str(key + '_denom'): value for key, value in camera_dict_denom.items() if not key == 'data'})
+    camera_dict_ratio['data'] = ratio_array
+    return camera_dict_ratio
     
 #%% Test
 if __name__ == "__main__":
@@ -74,9 +74,9 @@ if __name__ == "__main__":
     # line_ch_li = [('1', '4')]; (vmin,vmax) = (0,30)
     for shot_no in shot_li:
         for line_ch in line_ch_li:
-            camera_ratio_dict = calc_ratio(shot_no, line_ch, frame_tgt, num_frames)
+            camera_dict_ratio = calc_ratio(shot_no, line_ch, frame_tgt, num_frames)
 
-            plot_ratio_array_test(camera_ratio_dict['data'], vmin, vmax)
+            plot_ratio_array_test(camera_dict_ratio['data'], vmin, vmax)
     time_end = time.time()
     print('Time spent: ' + str(time_end-time_sta) + ' (s)')
     #print(camera_dict['frame_rate'])
