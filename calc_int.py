@@ -1,14 +1,9 @@
 #!/usr/bin/env python3
 
-import os
 import numpy as np
-import matplotlib.pyplot as plt
-from tqdm import tqdm
 
 from camera_reader_mt import camera_reader
 # import hampel_filter
-
-import matplotlib.pyplot as plt
 
 def calc_int(shot_no, line_ch, frame_tgt, num_frames):
     camera_dict_int = camera_reader(shot_no, line_ch, frame_tgt, num_frames, flg_rot=False)
@@ -27,6 +22,8 @@ def calc_int(shot_no, line_ch, frame_tgt, num_frames):
 #%% Test
 if __name__ == "__main__":
     import time
+    import matplotlib.pyplot as plt
+    
     def plot_int_array_test(int_array, vmin=None, vmax=None):
         num_frames = int_array.shape[0]
         fig, axs = plt.subplots(1, num_frames, figsize=(15, 5))

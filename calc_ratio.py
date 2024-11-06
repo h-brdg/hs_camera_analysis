@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 
-import os
 import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 from camera_reader_mt import camera_reader
 # import hampel_filter
-
-import matplotlib.pyplot as plt
 
 def calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames):
     camera_dict_numer = camera_reader(shot_no, line_ch_li[0], frame_tgt, num_frames, flg_rot=True)
@@ -47,6 +44,7 @@ def calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames):
 #%% Test
 if __name__ == "__main__":
     import time
+    import matplotlib.pyplot as plt
     def plot_ratio_array_test(ratio_array, vmin=None, vmax=None):
         num_frames = ratio_array.shape[0]
         fig, axs = plt.subplots(1, num_frames, figsize=(15, 5))
