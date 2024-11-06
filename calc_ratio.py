@@ -24,7 +24,22 @@ def calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames):
     
 #%% Calc
     # Calculate the ratio for each frame
-    ratio_array = np.empty_like(camera_dict_numer['data']) 
+    ratio_array = np.empty_like(camera_dict_numer['data'])
+    
+    estimated_size_gb = (camera_dict_numer['data'].size * 4) / (1024 ** 3)
+    # print('Estimated size of the data: ' + str(estimated_size_gb) + 'GB')
+
+    if True:   # For testing
+    # if estimated_size_gb > int(camera_dict_numer['mem_limit_size']):
+        memmap_filename = 'ratio_data.dat'
+        trimmed_memmap = np.memmap(memmap_filename, dtype='float32', mode='w+', shape=camera_dict_numer['data'].shape)
+        ratio_array = trimmed_memmap
+        print("Using memmap due to large data size")
+    else:
+        ratio_array =  np.empty_like(camera_dict_numer['data'], dtype='float32')
+        print("Using in-memory array")
+    
+    
     for i in tqdm(range(num_frames), desc="Calculating ratios"):
         ratio_array[i] = camera_dict_numer['data'][i] / camera_dict_denom['data'][i]
         
