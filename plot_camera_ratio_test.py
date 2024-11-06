@@ -7,12 +7,12 @@ import mpl_toolkits.axes_grid1
 from tqdm import tqdm
 
 from camera_reader_mt import camera_reader
-from calc_avg import calc_avg
+from calc_ratio import calc_ratio
 # import hampel_filter
 
 
 def plot_camera_ratio_frame(shot_no, line_ch, frame_tgt, num_frames, vmin=None, vmax=None):
-    camera_dict_ratio = calc_avg(shot_no, line_ch, frame_tgt, num_frames)
+    camera_dict_ratio = calc_ratio(shot_no, line_ch, frame_tgt, num_frames)
     
     dir_out = os.path.join(camera_dict_ratio['result_dir'], 'ratio', str(shot_no) + '_ch' + str(line_ch[0]) + '_over_ch' + str(line_ch[1]))
     os.makedirs(dir_out, exist_ok=True)
@@ -30,8 +30,8 @@ def plot_camera_ratio_frame(shot_no, line_ch, frame_tgt, num_frames, vmin=None, 
     zaxis = zaxis + 1095 - zaxis[-1]
     
     # max intensity
-    ymax = np.max(camera_dict_ratio['data'])
-    print('ymax = ' + str(ymax))
+    # ymax = np.max(camera_dict_ratio['data'])
+    # print('ymax = ' + str(ymax))
     
 #%% Hampel filter to detect outlier and set ymax accordingly
     # ymax, ymax_arg, hampel_fig = hampel_filter.filter_ymax(camera_dict['data'], hw_size=2, thr=3)
@@ -85,7 +85,7 @@ if __name__ == "__main__":
     time_sta = time.time()
     shot_li = [256221]
     
-    frame_tgt=8000
+    frame_tgt=11000
     num_frames=0
     line_ch_li = [('4', '2')]; (vmin,vmax) = (0,0.5)
     
