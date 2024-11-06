@@ -53,9 +53,9 @@ def plot_camera_ratio_frame(shot_no, line_ch, frame_tgt, num_frames, vmin=None, 
         fig.colorbar(ax_img, cax=cax)
         
         # Title
-        time_quot = int(((frame_tgt + i) // (int(camera_dict_ratio["frame_rate"])/100)) * 10) # quotient
-        time_quot += 50 # TEX 10
-        time_rem =  int((frame_tgt + i) % (int(camera_dict_ratio["frame_rate"])/100)) # reminder
+        frame_no = int(camera_dict_ratio["frame_start"]) + i
+        time_quot = int((frame_no // (int(camera_dict_ratio["frame_rate"])/100)) * 10) # quotient
+        time_rem =  int(frame_no % (int(camera_dict_ratio["frame_rate"])/100)) # remainder
         filler = len(str(camera_dict_ratio["frame_rate"]))
         ax.set_title('#'+str(shot_no)+' ch' + str(line_ch[0]) + ' over ch' + str(line_ch[1]) +'\n@' + str(time_quot) + ' ms + ' + str(time_rem).zfill(filler) + ' / ' + str(camera_dict_ratio["frame_rate"]) + " ms", fontsize=16)
 
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     time_sta = time.time()
     shot_li = [256221]
     
-    frame_tgt=11000
+    frame_tgt=11500
     num_frames=0
     line_ch_li = [('4', '2')]; (vmin,vmax) = (0,0.5)
     

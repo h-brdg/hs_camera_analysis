@@ -53,9 +53,9 @@ def plot_camera_int_frame(shot_no, line_ch, frame_tgt, num_frames):
         fig.colorbar(ax_img, cax=cax)
         
         # Title
-        time_quot = int(((frame_tgt + i) // (int(camera_dict_int["frame_rate"])/100)) * 10) # quotient
-        time_quot += 50 # TEX 10
-        time_rem =  int((frame_tgt + i) % (int(camera_dict_int["frame_rate"])/100)) # remainder
+        frame_no = int(camera_dict_int["frame_start"]) + i
+        time_quot = int((frame_no // (int(camera_dict_int["frame_rate"])/100)) * 10) # quotient
+        time_rem =  int(frame_no % (int(camera_dict_int["frame_rate"])/100)) # remainder
         filler = len(str(camera_dict_int["frame_rate"]))
         ax.set_title('#'+str(shot_no)+'_ch' + str(line_ch) +'\n@' + str(time_quot) + ' ms + ' + str(time_rem).zfill(filler) + ' / ' + str(camera_dict_int["frame_rate"]) + " ms", fontsize=16)
 
@@ -83,8 +83,8 @@ if __name__ == "__main__":
     
     time_sta = time.time()
     shot_li = [256221]
-    frame_tgt=10000
-    num_frames=100
+    frame_tgt=11500
+    num_frames=0
     #flg_rot=False
     # line_li = ['all']
     line_li = ['1']
