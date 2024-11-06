@@ -6,14 +6,12 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 from camera_reader_mt import camera_reader
-import read_config_info
 # import hampel_filter
 
 import matplotlib.pyplot as plt
 
 def calc_int(shot_no, line_ch, frame_tgt, num_frames):
     camera_dict_int = camera_reader(shot_no, line_ch, frame_tgt, num_frames, flg_rot=False)
-    config_dict = read_config_info.read_config_info()
     
 #%% Background
     # subtract the black level 128+64=192

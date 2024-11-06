@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 from camera_reader_mt import camera_reader
-import read_config_info
 # import hampel_filter
 
 import matplotlib.pyplot as plt
@@ -14,7 +13,6 @@ import matplotlib.pyplot as plt
 def calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames):
     camera_dict_numer = camera_reader(shot_no, line_ch_li[0], frame_tgt, num_frames, flg_rot=True)
     camera_dict_denom = camera_reader(shot_no, line_ch_li[1], frame_tgt, num_frames, flg_rot=True)
-    config_dict = read_config_info.read_config_info()
     
 #%% Background
     # subtract the black level 128+64=192
