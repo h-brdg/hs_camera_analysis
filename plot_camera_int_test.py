@@ -56,7 +56,7 @@ def plot_camera_int_frame(shot_no, line_ch, frame_tgt, num_frames):
         # Title
         time_quot = int(((frame_tgt + i) // (int(camera_dict_int["frame_rate"])/100)) * 10) # quotient
         time_quot += 50 # TEX 10
-        time_rem =  int((frame_tgt + i) % (int(camera_dict_int["frame_rate"])/100)) # reminder
+        time_rem =  int((frame_tgt + i) % (int(camera_dict_int["frame_rate"])/100)) # remainder
         filler = len(str(camera_dict_int["frame_rate"]))
         ax.set_title('#'+str(shot_no)+'_ch' + str(line_ch) +'\n@' + str(time_quot) + ' ms + ' + str(time_rem).zfill(filler) + ' / ' + str(camera_dict_int["frame_rate"]) + " ms", fontsize=16)
 
