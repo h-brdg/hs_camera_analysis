@@ -11,21 +11,6 @@ import read_config_info
 
 import matplotlib.pyplot as plt
 
-def plot_ratio_array(ratio_array, vmin=None, vmax=None):
-    num_frames = ratio_array.shape[0]
-    fig, axs = plt.subplots(1, num_frames, figsize=(15, 5))
-    
-    for i in range(num_frames):
-        ax = axs[i] if num_frames > 1 else axs
-        im = ax.imshow(ratio_array[i], cmap='viridis', vmin=vmin, vmax=vmax)
-        ax.set_title(f"Frame {i+1}")
-        ax.axis('off')
-    
-    # Add a colorbar to show the scale
-    fig.colorbar(im, ax=axs, orientation='vertical', fraction=0.02, pad=0.04)
-    plt.tight_layout()
-    plt.show()
-
 def calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames):
     camera_dict_numer = camera_reader(shot_no, line_ch_li[0], frame_tgt, num_frames, flg_rot=True)
     camera_dict_denom = camera_reader(shot_no, line_ch_li[1], frame_tgt, num_frames, flg_rot=True)
@@ -45,7 +30,7 @@ def calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames):
 #%% Calc
     # Calculate the ratio for each frame
     ratio_array = np.empty_like(camera_dict_numer['data']) 
-    for i in range(num_frames):
+    for i in tqdm(range(num_frames), desc="Calculating ratios"):
         ratio_array[i] = camera_dict_numer['data'][i] / camera_dict_denom['data'][i]
         
 #%% Return the dict    
@@ -64,9 +49,24 @@ def calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames):
 #%% Test
 if __name__ == "__main__":
     import time
+    def plot_ratio_array_test(ratio_array, vmin=None, vmax=None):
+        num_frames = ratio_array.shape[0]
+        fig, axs = plt.subplots(1, num_frames, figsize=(15, 5))
+        
+        for i in range(num_frames):
+            ax = axs[i] if num_frames > 1 else axs
+            im = ax.imshow(ratio_array[i], cmap='viridis', vmin=vmin, vmax=vmax)
+            ax.set_title(f"Frame {i+1}")
+            ax.axis('off')
+        
+        # Add a colorbar to show the scale
+        fig.colorbar(im, ax=axs, orientation='vertical', fraction=0.02, pad=0.04)
+        plt.tight_layout()
+        plt.show()
+    
     
     time_sta = time.time()
-    shot_li = [256223]
+    shot_li = [256221]
     frame_tgt=11000
     num_frames=1
     line_ch_li = [('4', '2')]; (vmin,vmax) = (0,0.5)
@@ -76,7 +76,7 @@ if __name__ == "__main__":
         for line_ch in line_ch_li:
             camera_ratio_dict = calc_ratio(shot_no, line_ch, frame_tgt, num_frames)
 
-            plot_ratio_array(camera_ratio_dict['data'], vmin, vmax)
+            plot_ratio_array_test(camera_ratio_dict['data'], vmin, vmax)
     time_end = time.time()
     print('Time spent: ' + str(time_end-time_sta) + ' (s)')
     #print(camera_dict['frame_rate'])
