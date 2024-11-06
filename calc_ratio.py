@@ -24,7 +24,7 @@ def calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames):
     
 #%% Calc
     # Calculate the ratio for each frame
-    ratio_array = np.empty_like(camera_dict_numer['data'])
+    camera_ratio_data = np.empty_like(camera_dict_numer['data'])
     
     estimated_size_gb = (camera_dict_numer['data'].size * 4) / (1024 ** 3)
     # print('Estimated size of the data: ' + str(estimated_size_gb) + 'GB')
@@ -33,40 +33,40 @@ def calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames):
     # if estimated_size_gb > int(camera_dict_numer['mem_limit_size']):
         memmap_filename = 'ratio_data.dat'
         trimmed_memmap = np.memmap(memmap_filename, dtype='float32', mode='w+', shape=camera_dict_numer['data'].shape)
-        ratio_array = trimmed_memmap
+        camera_ratio_data = trimmed_memmap
         print("Using memmap due to large data size")
     else:
-        ratio_array =  np.empty_like(camera_dict_numer['data'], dtype='float32')
+        camera_ratio_data =  np.empty_like(camera_dict_numer['data'], dtype='float32')
         print("Using in-memory array")
     
     
     for i in tqdm(range(num_frames), desc="Calculating ratios"):
-        ratio_array[i] = camera_dict_numer['data'][i] / camera_dict_denom['data'][i]
+        camera_ratio_data[i] = camera_dict_numer['data'][i] / camera_dict_denom['data'][i]
         
 #%% Return the dict    
     
     # camera_dict_ratio = {key:value for key, value in camera_dict_numer.items() if not key == 'data'}
-    # camera_dict_ratio['data'] = ratio_array
+    # camera_dict_ratio['data'] = camera_ratio_data
     # exclude_key_list = ('data', 'top_frame', 'bottom_frame', 'module_dir', 'result_dir')
     # camera_dict_ratio.update({str(key + '_denom'): value for key, value in camera_dict_denom.items() if not key in exclude_key_list})
 
     camera_dict_ratio = {key:value for key, value in camera_dict_numer.items() if not key == 'data'}
     camera_dict_ratio.update({str(key + '_numer'): value for key, value in camera_dict_numer.items() if not key == 'data'})
     camera_dict_ratio.update({str(key + '_denom'): value for key, value in camera_dict_denom.items() if not key == 'data'})
-    camera_dict_ratio['data'] = ratio_array
+    camera_dict_ratio['data'] = camera_ratio_data
     return camera_dict_ratio
     
 #%% Test
 if __name__ == "__main__":
     import time
     import matplotlib.pyplot as plt
-    def plot_ratio_array_test(ratio_array, vmin=None, vmax=None):
-        num_frames = ratio_array.shape[0]
+    def plot_camera_ratio_data_test(camera_ratio_data, vmin=None, vmax=None):
+        num_frames = camera_ratio_data.shape[0]
         fig, axs = plt.subplots(1, num_frames, figsize=(15, 5))
         
         for i in range(num_frames):
             ax = axs[i] if num_frames > 1 else axs
-            im = ax.imshow(ratio_array[i], cmap='viridis', vmin=vmin, vmax=vmax)
+            im = ax.imshow(camera_ratio_data[i], cmap='viridis', vmin=vmin, vmax=vmax)
             ax.set_title(f"Frame {i+1}")
             ax.axis('off')
         
@@ -87,7 +87,7 @@ if __name__ == "__main__":
         for line_ch in line_ch_li:
             camera_dict_ratio = calc_ratio(shot_no, line_ch, frame_tgt, num_frames)
 
-            plot_ratio_array_test(camera_dict_ratio['data'], vmin, vmax)
+            plot_camera_ratio_data_test(camera_dict_ratio['data'], vmin, vmax)
     time_end = time.time()
     print('Time spent: ' + str(time_end-time_sta) + ' (s)')
     #print(camera_dict['frame_rate'])
