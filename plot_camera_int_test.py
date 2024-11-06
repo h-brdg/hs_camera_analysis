@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import mpl_toolkits.axes_grid1
 from tqdm import tqdm
 
-from camera_reader_mt import camera_reader
 from calc_int import calc_int
 # import hampel_filter
 
