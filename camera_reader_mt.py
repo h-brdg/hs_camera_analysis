@@ -22,7 +22,7 @@ def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
     conv_dict = read_conv_info.read_conv_info(shot_no, tiff_dir)
     
     if num_frames == 0:
-        num_frames = int(conv_dict['bottom_frame']) - int(conv_dict['top_frame']) - frame_tgt
+        num_frames = int(conv_dict['bottom_frame']) - (int(conv_dict['top_frame']) + frame_tgt)
     
     first_frame = load_tiff.load_tiff(shot_no, tiff_dir, frame_tgt, 1)
     first_frame, tra_dict, coeff = transform_image.transform_image(shot_no, line_ch, tiff_dir, first_frame, flg_rot)
@@ -52,7 +52,7 @@ def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
                 i, img_array, tra_dict, coeff = result
                 camera_data[i - frame_tgt] = img_array
 
-    camera_dict = {'data': camera_data, 'coeff': coeff, 'frame_start': frame_tgt}
+    camera_dict = {'data': camera_data, 'coeff': coeff, 'frame_start': int(conv_dict['top_frame']) + frame_tgt}
     camera_dict.update(conv_dict)
     camera_dict.update(tra_dict)
     camera_dict.update(config_dict)

@@ -25,7 +25,7 @@ def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
     conv_dict = read_conv_info.read_conv_info(shot_no, tiff_dir)
     
     if num_frames == 0:
-        num_frames = int(conv_dict['bottom_frame']) - int(conv_dict['top_frame']) - frame_tgt  # Load all remaining frames
+        num_frames = int(conv_dict['bottom_frame']) - (int(conv_dict['top_frame']) + frame_tgt)  # Load all remaining frames
     
     # Load the first frame to determine the shape
     first_frame = load_tiff.load_tiff(shot_no, tiff_dir, frame_tgt, 1)
@@ -61,7 +61,7 @@ def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
         camera_data[i - frame_tgt] = img_array
 
     # Create a dictionary with the data storage type
-    camera_dict = {'data': camera_data, 'coeff': coeff, 'frame_start': frame_tgt}
+    camera_dict = {'data': camera_data, 'coeff': coeff, 'frame_start': int(conv_dict['top_frame']) + frame_tgt}
     camera_dict.update(conv_dict)
     camera_dict.update(tra_dict)
     camera_dict.update(config_dict)
