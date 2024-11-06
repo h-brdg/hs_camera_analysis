@@ -15,10 +15,14 @@ def calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames):
     # subtract the black level 128+64=192
     camera_dict_numer['data'] = camera_dict_numer['data']-(192*camera_dict_numer['coeff'])
     camera_dict_denom['data'] = camera_dict_denom['data']-(192*camera_dict_denom['coeff'])
-    
+       
     max_int_value = None
     min_int_value = 1E-10
     
+    # Invalid pixels with the value below min_int_value
+    camera_dict_numer['invalid_data'] = np.where(camera_dict_numer['data'] <= min_int_value, True, False) | np.where(camera_dict_numer['data'] < 0, True, False)
+
+    # Avoid zero divider error     
     np.clip(camera_dict_numer['data'], min_int_value, max_int_value, out=camera_dict_numer['data'])
     np.clip(camera_dict_denom['data'], min_int_value, max_int_value, out=camera_dict_denom['data'])
     
@@ -53,6 +57,9 @@ def calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames):
     camera_dict_ratio.update({str(key + '_numer'): value for key, value in camera_dict_numer.items() if not key == 'data'})
     camera_dict_ratio.update({str(key + '_denom'): value for key, value in camera_dict_denom.items() if not key == 'data'})
     camera_dict_ratio['data'] = camera_ratio_data
+    
+    camera_dict_ratio['data'] = np.where(camera_dict_numer['invalid_data'], np.nan, camera_dict_ratio['data'])
+    
     return camera_dict_ratio
     
 #%% Test
@@ -61,7 +68,7 @@ if __name__ == "__main__":
     
     time_sta = time.time()
     shot_li = [256221]
-    frame_tgt=11500
+    frame_tgt=11700
     num_frames=0
     line_ch_li = [('4', '2')]; (vmin,vmax) = (0,0.5)
     # line_ch_li = [('1', '2')]; (vmin,vmax) = (0,30)
