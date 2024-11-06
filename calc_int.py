@@ -22,34 +22,16 @@ def calc_int(shot_no, line_ch, frame_tgt, num_frames):
 #%% Test
 if __name__ == "__main__":
     import time
-    import matplotlib.pyplot as plt
-    
-    def plot_int_array_test(int_array, vmin=None, vmax=None):
-        num_frames = int_array.shape[0]
-        fig, axs = plt.subplots(1, num_frames, figsize=(15, 5))
-        
-        for i in range(num_frames):
-            ax = axs[i] if num_frames > 1 else axs
-            im = ax.imshow(int_array[i], cmap='viridis', vmin=vmin, vmax=vmax)
-            ax.set_title(f"Frame {i+1}")
-            ax.axis('off')
-        
-        # Add a colorbar to show the scale
-        fig.colorbar(im, ax=axs, orientation='vertical', fraction=0.02, pad=0.04)
-        plt.tight_layout()
-        plt.show()
-    
     
     time_sta = time.time()
     shot_li = [256221]
-    frame_tgt=11000
-    num_frames=1
+    frame_tgt=11500
+    num_frames=0
     line_ch_li = ['4', '2']
     for shot_no in shot_li:
         for line_ch in line_ch_li:
             camera_dict_int = calc_int(shot_no, line_ch, frame_tgt, num_frames)
             (vmin,vmax) = (0, np.max(camera_dict_int['data']))
-            plot_int_array_test(camera_dict_int['data'], vmin, vmax)
     time_end = time.time()
     print('Time spent: ' + str(time_end-time_sta) + ' (s)')
     #print(camera_dict['frame_rate'])

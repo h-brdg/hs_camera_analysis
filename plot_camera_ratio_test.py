@@ -39,7 +39,7 @@ def plot_camera_ratio_frame(shot_no, line_ch, frame_tgt, num_frames, vmin=None, 
     #ymax = 100000
 
 #%% Save fig
-    for i, img in tqdm(enumerate(camera_dict_ratio['data']),total = num_frames, desc='Saving figs...'):
+    for i, img in tqdm(enumerate(camera_dict_ratio['data']),total=camera_dict_ratio['data'].shape[0], desc='Saving figs...'):
         
         fig = plt.figure()
         ax = fig.add_subplot(1,1,1)

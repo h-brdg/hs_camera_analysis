@@ -70,25 +70,26 @@ if __name__ == "__main__":
     # num_frames = 0
     # avg_time = 10
     
-    frame_tgt = 11000
-    num_frames = 100
+    frame_tgt = 11500
+    num_frames = 0
     avg_time = 0.5
     
     camera_dict_avg = calc_avg(shot_no, line_ch, frame_tgt, num_frames, avg_time)
     
     # Plot each averaged frame in 'data_avg'
-    avg_data = camera_dict_avg['data_avg']
-    num_blocks = avg_data.shape[0]
-    
-    plt.figure(figsize=(10, 10))
-    
-    for i in range(num_blocks):
-        plt.subplot(int(np.ceil(np.sqrt(num_blocks))), int(np.ceil(np.sqrt(num_blocks))), i + 1)
-        plt.imshow(avg_data[i], cmap='gray')
-        plt.title(f"Frame {i}")
-        plt.axis('off')  # Hide axes for a cleaner look
-    
-    plt.tight_layout()
-    plt.suptitle(f"Averaged Frames for Shot {shot_no}", fontsize=16)
-    plt.subplots_adjust(top=0.9)
-    plt.show()
+    if False:
+        avg_data = camera_dict_avg['data_avg']
+        num_blocks = avg_data.shape[0]
+        
+        plt.figure(figsize=(10, 10))
+        
+        for i in range(num_blocks):
+            plt.subplot(int(np.ceil(np.sqrt(num_blocks))), int(np.ceil(np.sqrt(num_blocks))), i + 1)
+            plt.imshow(avg_data[i], cmap='gray')
+            plt.title(f"Frame {i}")
+            plt.axis('off')  # Hide axes for a cleaner look
+        
+        plt.tight_layout()
+        plt.suptitle(f"Averaged Frames for Shot {shot_no}", fontsize=16)
+        plt.subplots_adjust(top=0.9)
+        plt.show()

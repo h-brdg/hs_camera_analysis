@@ -24,7 +24,6 @@ def calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames):
     
 #%% Calc
     # Calculate the ratio for each frame
-    camera_ratio_data = np.empty_like(camera_dict_numer['data'])
     
     estimated_size_gb = (camera_dict_numer['data'].size * 4) / (1024 ** 3)
     # print('Estimated size of the data: ' + str(estimated_size_gb) + 'GB')
@@ -38,9 +37,9 @@ def calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames):
     else:
         camera_ratio_data =  np.empty_like(camera_dict_numer['data'], dtype='float32')
         print("Using in-memory array")
+        # print(camera_ratio_data.shape)
     
-    
-    for i in tqdm(range(num_frames), desc="Calculating ratios"):
+    for i in tqdm(range(camera_ratio_data.shape[0]), total=camera_ratio_data.shape[0], desc="Calculating ratios"):
         camera_ratio_data[i] = camera_dict_numer['data'][i] / camera_dict_denom['data'][i]
         
 #%% Return the dict    
@@ -59,35 +58,17 @@ def calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames):
 #%% Test
 if __name__ == "__main__":
     import time
-    import matplotlib.pyplot as plt
-    def plot_camera_ratio_data_test(camera_ratio_data, vmin=None, vmax=None):
-        num_frames = camera_ratio_data.shape[0]
-        fig, axs = plt.subplots(1, num_frames, figsize=(15, 5))
-        
-        for i in range(num_frames):
-            ax = axs[i] if num_frames > 1 else axs
-            im = ax.imshow(camera_ratio_data[i], cmap='viridis', vmin=vmin, vmax=vmax)
-            ax.set_title(f"Frame {i+1}")
-            ax.axis('off')
-        
-        # Add a colorbar to show the scale
-        fig.colorbar(im, ax=axs, orientation='vertical', fraction=0.02, pad=0.04)
-        plt.tight_layout()
-        plt.show()
-    
     
     time_sta = time.time()
     shot_li = [256221]
-    frame_tgt=11000
-    num_frames=1
+    frame_tgt=11500
+    num_frames=0
     line_ch_li = [('4', '2')]; (vmin,vmax) = (0,0.5)
     # line_ch_li = [('1', '2')]; (vmin,vmax) = (0,30)
     # line_ch_li = [('1', '4')]; (vmin,vmax) = (0,30)
     for shot_no in shot_li:
         for line_ch in line_ch_li:
             camera_dict_ratio = calc_ratio(shot_no, line_ch, frame_tgt, num_frames)
-
-            plot_camera_ratio_data_test(camera_dict_ratio['data'], vmin, vmax)
     time_end = time.time()
     print('Time spent: ' + str(time_end-time_sta) + ' (s)')
     #print(camera_dict['frame_rate'])
