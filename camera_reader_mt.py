@@ -5,6 +5,7 @@ import read_config_info
 import numpy as np
 from tqdm import tqdm
 import concurrent.futures
+import os
 
 def process_frame(shot_no, tiff_dir, i, line_ch, flg_rot):
     """Load and transform a single frame."""
@@ -19,6 +20,7 @@ def process_frame(shot_no, tiff_dir, i, line_ch, flg_rot):
 def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
     config_dict = read_config_info.read_config_info()
     tiff_dir = config_dict['tiff_dir']
+    result_dir = config_dict['result_dir']
     conv_dict = read_conv_info.read_conv_info(shot_no, tiff_dir)
     
     if num_frames == 0:
@@ -29,15 +31,20 @@ def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
     frame_shape = first_frame[0].shape
     estimated_size_gb = (num_frames * frame_shape[0] * frame_shape[1] * 4) / (1024 ** 3)
 
-    # if True:   # For testing
-    if estimated_size_gb > int(config_dict['mem_limit_size']):
-        memmap_filename = 'trimmed_image.dat'
-        trimmed_memmap = np.memmap(memmap_filename, dtype='float32', mode='w+', shape=(num_frames,) + frame_shape)
-        camera_data = trimmed_memmap
-        print("Using memmap due to large data size")
+    memmap_filename = f'trimmed_image_{shot_no}_ch{line_ch}.dat'
+    memmap_path = os.path.join(memmap_dir, memmap_filename)
+
+    if os.path.exists(memmap_path):
+        camera_data = np.memmap(memmap_path, dtype='float32', mode='r+', shape=(num_frames,) + frame_shape)
+        print(f"Using existing memmap file: {memmap_path}")
     else:
-        camera_data = np.empty((num_frames,) + frame_shape, dtype='float32')
-        print("Using in-memory array")
+        if estimated_size_gb > int(config_dict['mem_limit_size']):
+            trimmed_memmap = np.memmap(memmap_path, dtype='float32', mode='w+', shape=(num_frames,) + frame_shape)
+            camera_data = trimmed_memmap
+            print("Using memmap due to large data size")
+        else:
+            camera_data = np.empty((num_frames,) + frame_shape, dtype='float32')
+            print("Using in-memory array")
 
     # Multi-threading for processing each frame
     with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -79,4 +86,3 @@ if __name__ == "__main__":
     
     time_end = time.time()
     print('Time spent: ' + str(time_end - time_sta) + ' (s)')
-
