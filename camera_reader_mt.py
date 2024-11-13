@@ -47,18 +47,18 @@ def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
             camera_data = np.empty((num_frames,) + frame_shape, dtype='float32')
             print("Using in-memory array")
 
-    # Multi-threading for processing each frame
-    with concurrent.futures.ThreadPoolExecutor() as executor:
-        future_to_frame = {
-            executor.submit(process_frame, shot_no, tiff_dir, i, line_ch, flg_rot): i 
-            for i in range(frame_tgt, frame_tgt + num_frames)
-        }
-
-        for future in tqdm(concurrent.futures.as_completed(future_to_frame), total=num_frames, desc="Loading frames..."):
-            result = future.result()
-            if result is not None:
-                i, img_array, tra_dict, coeff = result
-                camera_data[i - frame_tgt] = img_array
+        # Multi-threading for processing each frame
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future_to_frame = {
+                executor.submit(process_frame, shot_no, tiff_dir, i, line_ch, flg_rot): i 
+                for i in range(frame_tgt, frame_tgt + num_frames)
+            }
+    
+            for future in tqdm(concurrent.futures.as_completed(future_to_frame), total=num_frames, desc="Loading frames..."):
+                result = future.result()
+                if result is not None:
+                    i, img_array, tra_dict, coeff = result
+                    camera_data[i - frame_tgt] = img_array
 
     camera_dict = {'data': camera_data, 'coeff': coeff, 'frame_start': int(conv_dict['top_frame']) + frame_tgt}
     camera_dict.update(conv_dict)
