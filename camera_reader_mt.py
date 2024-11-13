@@ -20,7 +20,8 @@ def process_frame(shot_no, tiff_dir, i, line_ch, flg_rot):
 def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
     config_dict = read_config_info.read_config_info()
     tiff_dir = config_dict['tiff_dir']
-    result_dir = config_dict['result_dir']
+    memmap_dir = os.path.join(config_dict['result_dir'], 'memmap')
+    os.makedirs(memmap_dir, exist_ok=True)
     conv_dict = read_conv_info.read_conv_info(shot_no, tiff_dir)
     
     if num_frames == 0:
@@ -75,7 +76,7 @@ if __name__ == "__main__":
     time_sta = time.time()
     shot_no = 256221
     frame_tgt = 0
-    num_frames = 1000
+    num_frames = 100
     flg_rot = False
     line_ch = '2' 
     camera_dict = camera_reader(shot_no, line_ch, frame_tgt, num_frames, flg_rot)
