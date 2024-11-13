@@ -83,11 +83,11 @@ if __name__ == "__main__":
     
     time_sta = time.time()
     shot_li = [256221]
-    frame_tgt=11500
+    frame_tgt=0
     num_frames=0
     #flg_rot=False
     # line_li = ['all']
-    line_li = ['1']
+    line_li = ['1', '2', '4']
     for shot_no in shot_li:
         for line_ch in line_li:
             plot_camera_int_frame(shot_no, line_ch, frame_tgt, num_frames)

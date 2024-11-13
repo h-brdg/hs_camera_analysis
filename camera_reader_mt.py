@@ -42,10 +42,10 @@ def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
         if estimated_size_gb > int(config_dict['mem_limit_size']):
             trimmed_memmap = np.memmap(memmap_path, dtype='float32', mode='w+', shape=(num_frames,) + frame_shape)
             camera_data = trimmed_memmap
-            print("Using memmap due to large data size")
+            print(f"Using memmap due to large data size: {memmap_path}")
         else:
             camera_data = np.empty((num_frames,) + frame_shape, dtype='float32')
-            print("Using in-memory array")
+            print("Using in-memory array for trimmed data")
 
         # Multi-threading for processing each frame
         with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -76,10 +76,13 @@ if __name__ == "__main__":
     time_sta = time.time()
     shot_no = 256221
     frame_tgt = 0
-    num_frames = 100
+    num_frames = 0
     flg_rot = False
-    line_ch = '2' 
-    camera_dict = camera_reader(shot_no, line_ch, frame_tgt, num_frames, flg_rot)
+    shot_li = [256221,256223]
+    line_ch_li = ('4', '2', '1')
+    for shot_no in shot_li:
+        for line_ch in line_ch_li:
+                camera_dict = camera_reader(shot_no, line_ch, frame_tgt, num_frames, flg_rot)
     
     if camera_dict:
         plt.imshow(camera_dict['data'][0, :, :])

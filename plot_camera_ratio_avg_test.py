@@ -87,7 +87,7 @@ if __name__ == "__main__":
     # avg_time = 0.5
     # frame_tgt = 11700
     
-    avg_time=5
+    avg_time=10
     frame_tgt=0
     
     num_frames=0

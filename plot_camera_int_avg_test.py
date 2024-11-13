@@ -84,7 +84,7 @@ if __name__ == "__main__":
     
     time_sta = time.time()
     shot_li = [256221]
-    frame_tgt=11700
+    frame_tgt=0
     num_frames=0
     avg_time = 0.5
     #flg_rot=False

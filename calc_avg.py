@@ -70,7 +70,7 @@ if __name__ == "__main__":
     # num_frames = 0
     # avg_time = 10
     
-    frame_tgt = 11700
+    frame_tgt = 0
     num_frames = 0
     avg_time = 0.5
     
