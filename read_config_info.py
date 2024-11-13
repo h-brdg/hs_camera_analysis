@@ -10,7 +10,9 @@ def read_config_info():
                        'tiff_dir': config_ini['Paths']['tiff_dir'],
                        'module_dir': config_ini['Paths']['module_dir'],
                        'result_dir': config_ini['Paths']['result_dir'],
-                       'mem_limit_size': config_ini['Settings']['mem_limit_size']}
+                       'memmap_dir': config_ini['Paths']['memmap_dir'],
+                       'mem_limit_size': config_ini['Settings']['mem_limit_size']
+                      }
     except:
         print('Problem reading camera_config.ini')
         config_dict = {}

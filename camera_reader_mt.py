@@ -20,7 +20,7 @@ def process_frame(shot_no, tiff_dir, i, line_ch, flg_rot):
 def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
     config_dict = read_config_info.read_config_info()
     tiff_dir = config_dict['tiff_dir']
-    memmap_dir = os.path.join(config_dict['result_dir'], 'memmap')
+    memmap_dir = config_dict['memmap_dir']
     os.makedirs(memmap_dir, exist_ok=True)
     conv_dict = read_conv_info.read_conv_info(shot_no, tiff_dir)
     
@@ -32,7 +32,7 @@ def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
     frame_shape = first_frame[0].shape
     estimated_size_gb = (num_frames * frame_shape[0] * frame_shape[1] * 4) / (1024 ** 3)
 
-    memmap_filename = f'trimmed_image_{shot_no}_ch{line_ch}_tgt{frame_tgt}_{num_frames}frs.dat'
+    memmap_filename = f'trimmed_{shot_no}_ch{line_ch}_tgt{frame_tgt}_{num_frames}frs.dat'
     memmap_path = os.path.join(memmap_dir, memmap_filename)
 
     if os.path.exists(memmap_path):

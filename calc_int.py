@@ -25,9 +25,9 @@ if __name__ == "__main__":
     
     time_sta = time.time()
     shot_li = [256221]
-    frame_tgt=11500
+    frame_tgt=0
     num_frames=0
-    line_ch_li = ['4', '2']
+    line_ch_li = ['4', '2', '1']
     for shot_no in shot_li:
         for line_ch in line_ch_li:
             camera_dict_int = calc_int(shot_no, line_ch, frame_tgt, num_frames)
