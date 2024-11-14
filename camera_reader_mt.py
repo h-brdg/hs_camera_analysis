@@ -32,7 +32,11 @@ def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
     frame_shape = first_frame[0].shape
     estimated_size_gb = (num_frames * frame_shape[0] * frame_shape[1] * 4) / (1024 ** 3)
 
-    memmap_filename = f'trimmed_{shot_no}_ch{line_ch}_tgt{frame_tgt}_{num_frames}frs.dat'
+    if flg_rot:
+        transformed = 'rot'
+    else:
+        transformed = 'org'
+    memmap_filename = f'trimmed_{shot_no}_ch{line_ch}_tgt{frame_tgt}_{num_frames}frs_{transformed}.dat'
     memmap_path = os.path.join(memmap_dir, memmap_filename)
 
     if os.path.exists(memmap_path):
@@ -79,6 +83,7 @@ if __name__ == "__main__":
     num_frames = 0
     flg_rot = False
     shot_li = [256221,256223]
+    shot_li = [256221]
     line_ch_li = ('4', '2', '1')
     for shot_no in shot_li:
         for line_ch in line_ch_li:

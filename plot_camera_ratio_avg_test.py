@@ -45,7 +45,7 @@ def plot_camera_avg_frame(shot_no, line_ch, frame_tgt, num_frames, vmin, vmax, a
         ax = fig.add_subplot(1,1,1)
         
         # Draw the figure
-        ax_img = ax.imshow(img, extent=[zaxis[0], zaxis[-1], xaxis[-1], xaxis[0]], vmax=vmax, vmin=vmin, cmap='jet')
+        ax_img = ax.imshow(img, extent=[zaxis[0], zaxis[-1], xaxis[-1], xaxis[0]], vmax=vmax, vmin=vmin, cmap='plasma')
         
         # Color bar
         divider = mpl_toolkits.axes_grid1.make_axes_locatable(ax)
@@ -87,7 +87,7 @@ if __name__ == "__main__":
     # avg_time = 0.5
     # frame_tgt = 11700
     
-    avg_time=10
+    avg_time=5
     frame_tgt=0
     
     num_frames=0
@@ -100,6 +100,7 @@ if __name__ == "__main__":
     # frame_tgt=8000
     # num_frames=0
     line_ch_li = [('1', '4')]; (vmin,vmax) = (0,80)
+    line_ch_li = [('4', '1')]; (vmin,vmax) = (0,0.3)
     for shot_no in shot_li:
         for line_ch in line_ch_li:
             plot_camera_avg_frame(shot_no, line_ch, frame_tgt, num_frames, vmin, vmax, avg_time)
