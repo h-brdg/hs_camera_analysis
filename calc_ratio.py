@@ -20,6 +20,7 @@ def calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames):
     # Mark invalid pixels with value below min_int_value
     camera_dict_numer['invalid_data'] = (
         (camera_dict_numer['data'] <= min_int_value) | (camera_dict_numer['data'] < 0)
+     | (camera_dict_denom['data'] <= min_int_value) | (camera_dict_denom['data'] < 0)
     )
 
     # Avoid zero divider error

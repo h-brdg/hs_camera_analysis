@@ -45,7 +45,7 @@ def plot_camera_int_frame(shot_no, line_ch, frame_tgt, num_frames, avg_time):
         ax = fig.add_subplot(1,1,1)
         
         # Draw the figure
-        ax_img = ax.imshow(img, extent=[zaxis[0], zaxis[-1], xaxis[-1], xaxis[0]], vmax=ymax, vmin=0, cmap='jet')
+        ax_img = ax.imshow(img, extent=[zaxis[0], zaxis[-1], xaxis[-1], xaxis[0]], vmax=ymax, vmin=0, cmap='plasma')
         
         # Color bar
         divider = mpl_toolkits.axes_grid1.make_axes_locatable(ax)
@@ -89,7 +89,7 @@ if __name__ == "__main__":
     avg_time = 0.5
     #flg_rot=False
     # line_li = ['all']
-    line_li = ['1']
+    line_li = ['1', '2', '4']
     for shot_no in shot_li:
         for line_ch in line_li:
             plot_camera_int_frame(shot_no, line_ch, frame_tgt, num_frames, avg_time)

@@ -31,18 +31,20 @@ def calc_avg(shot_no, line_ch, frame_tgt=0, num_frames=0, avg_time=10):
     # print(total_time)
     # print(num_avg_block)
     
-    estimated_size_gb = (num_avg_block * int(camera_dict_avg['trimmed_size'][0]) * int(camera_dict_avg['trimmed_size'][1]) * 4) / (1024 ** 3)
-    # print('Estimated size of the data: ' + str(estimated_size_gb) + 'GB')
+    # estimated_size_gb = (num_avg_block * int(camera_dict_avg['trimmed_size'][0]) * int(camera_dict_avg['trimmed_size'][1]) * 4) / (1024 ** 3)
+    # # print('Estimated size of the data: ' + str(estimated_size_gb) + 'GB')
 
-    # if True:   # For testing
-    if estimated_size_gb > int(camera_dict_avg['mem_limit_size']):
-        memmap_filename = 'average_data.dat'
-        trimmed_memmap = np.memmap(memmap_filename, dtype='float32', mode='w+', shape=(num_avg_block,) + camera_dict_avg['trimmed_size'])
-        avg_data = trimmed_memmap
-        print("Using memmap due to large data size")
-    else:
-        avg_data = np.zeros((num_avg_block,) + camera_dict_avg['trimmed_size'])
-        print("Using in-memory array")
+    # # if True:   # For testing
+    # if estimated_size_gb > int(camera_dict_avg['mem_limit_size']):
+    #     memmap_filename = 'average_data.dat'
+    #     trimmed_memmap = np.memmap(memmap_filename, dtype='float32', mode='w+', shape=(num_avg_block,) + camera_dict_avg['trimmed_size'])
+    #     avg_data = trimmed_memmap
+    #     print("Using memmap due to large data size")
+    # else:
+    #     avg_data = np.zeros((num_avg_block,) + camera_dict_avg['trimmed_size'])
+    #     print("Using in-memory array")
+    avg_data = np.zeros((num_avg_block,) + camera_dict_avg['trimmed_size'])
+    print("Using in-memory array")
 
     # print(avg_data.shape)
     avg_time_list = []
