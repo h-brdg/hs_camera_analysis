@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import configparser
+import os
 
 def search_section(shot_no, search_ini):
     #search_ini = configparser.ConfigParser()
@@ -15,9 +17,25 @@ def search_section(shot_no, search_ini):
 
 def read_trim_info(shot_no, line_type, tiff_dir):
     trim_ini = configparser.ConfigParser()
-    trim_ini.read('trim_info.ini', encoding='utf-8')
     
-    info_sect = search_section(shot_no, trim_ini)
+    # Check if custom ini file exists
+    if os.path.exists('trim_info_custom.ini'):
+        ini_file = 'trim_info_custom.ini'
+        trim_ini.read(ini_file, encoding='utf-8')
+        info_sect = search_section(shot_no, trim_ini)
+        if info_sect == 'DEFAULT':
+            ini_file = 'trim_info.ini'
+            trim_ini.read(ini_file, encoding='utf-8')
+            print('Reading from trim_info.ini')
+        else:
+            print('Reading from trim_info_custom.ini')
+
+        
+    else:
+        ini_file = 'trim_info.ini'
+        trim_ini.read(ini_file, encoding='utf-8')
+        info_sect = search_section(shot_no, trim_ini)
+        print('Reading from trim_info.ini')
     
     if (line_type=='all'):
         (info_left, info_right, info_top, info_bottom, rot_deg, tra_x, tra_y) = ('left_4', 'right_4', 'top', 'bottom', 'rot_deg_ch1', 'tra_x_ch1', 'tra_y_ch1')
