@@ -38,7 +38,7 @@ def read_trim_info(shot_no, line_type, tiff_dir):
         print('trim_info_custom.ini does not exist. Reading the default values from trim_info.ini')
     
     if (line_type=='all'):
-        (info_left, info_right, info_top, info_bottom, rot_deg, tra_x, tra_y) = ('left_4', 'right_4', 'top', 'bottom', 'rot_deg_ch1', 'tra_x_ch1', 'tra_y_ch1')
+        (info_left, info_right, info_top, info_bottom, rot_deg, tra_x, tra_y) = ('left_all', 'right_all', 'top', 'bottom', 'rot_deg_ch1', 'tra_x_ch1', 'tra_y_ch1')
     elif (line_type=='4'): #n21ps
         (info_left, info_right, info_top, info_bottom, rot_deg, tra_x, tra_y) = ('left', 'right', 'top_ch4', 'bottom_ch4', 'rot_deg_ch4', 'tra_x_ch4', 'tra_y_ch4')
     elif (line_type=='3'): #natom
