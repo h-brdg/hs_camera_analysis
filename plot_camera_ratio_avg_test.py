@@ -95,7 +95,7 @@ if __name__ == "__main__":
     
     # frame_tgt=0
     # num_frames=8000
-    line_ch_li = [('1', '2')]; (vmin,vmax) = (0,30)
+    # line_ch_li = [('1', '2')]; (vmin,vmax) = (0,30)
     
     # frame_tgt=8000
     # num_frames=0
