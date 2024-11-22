@@ -26,7 +26,7 @@ def read_trim_info(shot_no, line_type, tiff_dir):
         if info_sect == 'DEFAULT':
             ini_file = 'trim_info.ini'
             trim_ini.read(ini_file, encoding='utf-8')
-            print('Reading from trim_info.ini')
+            print('No section in trim_info_custom.ini for this shot. Reading the default values from trim_info.ini')
         else:
             print('Reading from trim_info_custom.ini')
 
@@ -35,7 +35,7 @@ def read_trim_info(shot_no, line_type, tiff_dir):
         ini_file = 'trim_info.ini'
         trim_ini.read(ini_file, encoding='utf-8')
         info_sect = search_section(shot_no, trim_ini)
-        print('Reading from trim_info.ini')
+        print('trim_info_custom.ini does not exist. Reading the default values from trim_info.ini')
     
     if (line_type=='all'):
         (info_left, info_right, info_top, info_bottom, rot_deg, tra_x, tra_y) = ('left_4', 'right_4', 'top', 'bottom', 'rot_deg_ch1', 'tra_x_ch1', 'tra_y_ch1')
