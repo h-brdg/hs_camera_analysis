@@ -30,7 +30,7 @@ def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
     first_frame = load_tiff.load_tiff(shot_no, tiff_dir, frame_tgt, 1)
     first_frame, tra_dict, coeff = transform_image.transform_image(shot_no, line_ch, tiff_dir, first_frame, flg_rot)
     frame_shape = first_frame[0].shape
-    estimated_size_gb = (num_frames * frame_shape[0] * frame_shape[1] * 4) / (1024 ** 3)
+    estimated_size_mb = (num_frames * frame_shape[0] * frame_shape[1] * 4) / (1024 ** 2)
 
     if flg_rot:
         transformed = 'rot'
@@ -43,7 +43,7 @@ def camera_reader(shot_no, line_ch, frame_tgt=0, num_frames=0, flg_rot=False):
         camera_data = np.memmap(memmap_path, dtype='float32', mode='r+', shape=(num_frames,) + frame_shape)
         print(f"Using existing memmap file: {memmap_path}")
     else:
-        if estimated_size_gb > int(config_dict['mem_limit_size']):
+        if estimated_size_mb > int(config_dict['mem_limit_size']):
             trimmed_memmap = np.memmap(memmap_path, dtype='float32', mode='w+', shape=(num_frames,) + frame_shape)
             camera_data = trimmed_memmap
             print(f"Using memmap due to large data size: {memmap_path}")
