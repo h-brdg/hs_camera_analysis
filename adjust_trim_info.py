@@ -59,33 +59,33 @@ class ImageEditor(QWidget):
         self.imageLabel = QLabel(self)
         self.layout.addWidget(self.imageLabel)
 
-        self.formLayout2 = QFormLayout()
-        self.leftEdit = QLineEdit(self)
-        self.leftLabel = QLabel(self)
-        self.rightEdit = QLineEdit(self)
-        self.rightLabel = QLabel(self)
-        self.topEdit = QLineEdit(self)
-        self.topLabel = QLabel(self)
-        self.bottomEdit = QLineEdit(self)
-        self.bottomLabel = QLabel(self)
+        # self.formLayout2 = QFormLayout()
+        # self.leftEdit = QLineEdit(self)
+        # self.leftLabel = QLabel(self)
+        # self.rightEdit = QLineEdit(self)
+        # self.rightLabel = QLabel(self)
+        # self.topEdit = QLineEdit(self)
+        # self.topLabel = QLabel(self)
+        # self.bottomEdit = QLineEdit(self)
+        # self.bottomLabel = QLabel(self)
         
-        self.formLayout2.addRow("Left:", self.leftEdit)
-        self.formLayout2.addRow("Current Left:", self.leftLabel)
-        self.formLayout2.addRow("Right:", self.rightEdit)
-        self.formLayout2.addRow("Current Right:", self.rightLabel)
-        self.formLayout2.addRow("Top:", self.topEdit)
-        self.formLayout2.addRow("Current Top:", self.topLabel)
-        self.formLayout2.addRow("Bottom:", self.bottomEdit)
-        self.formLayout2.addRow("Current Bottom:", self.bottomLabel)
-        self.layout.addLayout(self.formLayout2)
+        # self.formLayout2.addRow("Left:", self.leftEdit)
+        # self.formLayout2.addRow("Current Left:", self.leftLabel)
+        # self.formLayout2.addRow("Right:", self.rightEdit)
+        # self.formLayout2.addRow("Current Right:", self.rightLabel)
+        # self.formLayout2.addRow("Top:", self.topEdit)
+        # self.formLayout2.addRow("Current Top:", self.topLabel)
+        # self.formLayout2.addRow("Bottom:", self.bottomEdit)
+        # self.formLayout2.addRow("Current Bottom:", self.bottomLabel)
+        # self.layout.addLayout(self.formLayout2)
         
-        self.loadConfigButton = QPushButton("Load Config", self)
-        self.loadConfigButton.clicked.connect(self.loadConfig)
-        self.layout.addWidget(self.loadConfigButton)
+        # self.loadConfigButton = QPushButton("Load Config", self)
+        # self.loadConfigButton.clicked.connect(self.loadConfig)
+        # self.layout.addWidget(self.loadConfigButton)
         
-        self.saveButton = QPushButton("Save Config", self)
-        self.saveButton.clicked.connect(self.saveConfig)
-        self.layout.addWidget(self.saveButton)
+        # self.saveButton = QPushButton("Save Config", self)
+        # self.saveButton.clicked.connect(self.saveConfig)
+        # self.layout.addWidget(self.saveButton)
 
         self.setLayout(self.layout)
         self.setWindowTitle('Image Editor')
@@ -96,14 +96,22 @@ class ImageEditor(QWidget):
         line_ch = self.lineChEdit.text()
         frame_tgt = int(self.frameTgtEdit.text())
         num_frames = 1
+        flg_rot = self.flagRotate.isChecked()
+        print(flg_rot)
 
-        camera_dict_int = calc_int(shot_no, line_ch, frame_tgt, num_frames, flg_rot=True)
+        camera_dict_int = calc_int(shot_no, line_ch, frame_tgt, num_frames, flg_rot)
         data = camera_dict_int['data']
 
         frames, height, width = data.shape
         data = (data - data.min()) / (data.max() - data.min()) * 255
         data = data.astype(np.uint8)
-        qimg = QImage(data.data, width, height, width, QImage.Format_Grayscale8)
+        
+        # Applying colormap
+        colormap = plt.cm.viridis  # Change colormap here
+        data_colored = colormap(data / 255.0)
+        data_colored = (data_colored[:, :, :, :3] * 255).astype(np.uint8)  # Drop the alpha channel
+        
+        qimg = QImage(data_colored.data, width, height, width * 3, QImage.Format_RGB888)
         pixmap = QPixmap.fromImage(qimg)
         self.imageLabel.setPixmap(pixmap)
         
@@ -119,15 +127,15 @@ class ImageEditor(QWidget):
         data = camera_dict_ratio['data']
 
         frames, height, width = data.shape
-        print(data[0,int(height/2),int(width/2)])
-        print(data.min())
-        print(data.max())
-        print(np.median(data))
-        # data = (data - data.min()) / (np.median(data) - data.min()) * 255
-        data = data / data[0,int(height/2),int(width/2)] * 255
-        
+        data = data / data[0, int(height/2), int(width/2)] * 255 * 0.8
         data = data.astype(np.uint8)
-        qimg = QImage(data.data, width, height, width, QImage.Format_Grayscale8)
+        
+        # Applying colormap
+        colormap = plt.cm.viridis  # Change colormap here
+        data_colored = colormap(data / 255.0)
+        data_colored = (data_colored[:, :, :, :3] * 255).astype(np.uint8)  # Drop the alpha channel
+        
+        qimg = QImage(data_colored.data, width, height, width * 3, QImage.Format_RGB888)
         pixmap = QPixmap.fromImage(qimg)
         self.imageLabel.setPixmap(pixmap)        
 
