@@ -7,8 +7,8 @@ import os
 
 from camera_reader_mt import camera_reader
 
-def calc_int(shot_no, line_ch, frame_tgt, num_frames):
-    camera_dict_int = camera_reader(shot_no, line_ch, frame_tgt, num_frames, flg_rot=False)
+def calc_int(shot_no, line_ch, frame_tgt, num_frames, flg_rot=False):
+    camera_dict_int = camera_reader(shot_no, line_ch, frame_tgt, num_frames, flg_rot)
 
     if num_frames == 0:
         num_frames = int(camera_dict_int['bottom_frame']) - (int(camera_dict_int['top_frame']) + frame_tgt)

@@ -2,9 +2,10 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import configparser
-from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QLineEdit, QFormLayout, QFileDialog)
+from PyQt5.QtWidgets import (QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QLineEdit, QFormLayout, QFileDialog, QCheckBox)
 from PyQt5.QtGui import QPixmap, QImage
 from calc_int import calc_int  # Import calc_int from calc_int.py
+from calc_ratio import calc_ratio
 from read_trim_info import read_trim_info  # Import read_trim_info from read_trim_info.py
 
 class ImageEditor(QWidget):
@@ -14,20 +15,46 @@ class ImageEditor(QWidget):
     
     def initUI(self):
         self.layout = QVBoxLayout()
+        
+        self.formLayoutIni = QFormLayout()
 
-        self.formLayout = QFormLayout()
         self.shotNoEdit = QLineEdit(self)
-        self.lineChEdit = QLineEdit(self)
         self.frameTgtEdit = QLineEdit(self)
         
-        self.formLayout.addRow("Shot No:", self.shotNoEdit)
-        self.formLayout.addRow("Line Ch:", self.lineChEdit)
-        self.formLayout.addRow("Frame Target:", self.frameTgtEdit)
-        self.layout.addLayout(self.formLayout)
+        self.formLayoutIni.addRow("Shot No:", self.shotNoEdit)
+        self.formLayoutIni.addRow("Frame Target:", self.frameTgtEdit)
+        
+        self.flagRotate = QCheckBox(self)
+        self.flagRotateDesc = QLabel(self)
+        
+        self.formLayoutIni.addRow("Transform:", self.flagRotate)
+        self.formLayoutIni.addRow(" (for the ratio, they are always transformed)", self.flagRotateDesc)
+        self.layout.addLayout(self.formLayoutIni)
+
+
+        self.formLayoutInt = QFormLayout()
+        self.lineChEdit = QLineEdit(self)
+        
+        self.formLayoutInt.addRow("Line Ch:", self.lineChEdit)
+        self.layout.addLayout(self.formLayoutInt)
 
         self.loadButton = QPushButton("Load Sample Image", self)
         self.loadButton.clicked.connect(self.loadImage)
         self.layout.addWidget(self.loadButton)
+        
+        self.formLayoutRatio = QFormLayout()
+        
+        self.lineChEdit_numer = QLineEdit(self)
+        self.lineChEdit_denom = QLineEdit(self)
+        
+        self.formLayoutRatio.addRow("Line Ch numerator:", self.lineChEdit_numer)
+        self.formLayoutRatio.addRow("Line Ch denominator:", self.lineChEdit_denom)
+        self.layout.addLayout(self.formLayoutRatio)
+
+        self.loadRatioButton = QPushButton("Load Sample Ratio", self)
+        self.loadRatioButton.clicked.connect(self.loadRatioImage)
+        self.layout.addWidget(self.loadRatioButton)
+        
 
         self.imageLabel = QLabel(self)
         self.layout.addWidget(self.imageLabel)
@@ -70,7 +97,7 @@ class ImageEditor(QWidget):
         frame_tgt = int(self.frameTgtEdit.text())
         num_frames = 1
 
-        camera_dict_int = calc_int(shot_no, line_ch, frame_tgt, num_frames)
+        camera_dict_int = calc_int(shot_no, line_ch, frame_tgt, num_frames, flg_rot=True)
         data = camera_dict_int['data']
 
         frames, height, width = data.shape
@@ -79,6 +106,30 @@ class ImageEditor(QWidget):
         qimg = QImage(data.data, width, height, width, QImage.Format_Grayscale8)
         pixmap = QPixmap.fromImage(qimg)
         self.imageLabel.setPixmap(pixmap)
+        
+    def loadRatioImage(self):
+        shot_no = int(self.shotNoEdit.text())
+        line_ch_numer = self.lineChEdit_numer.text()
+        line_ch_denom = self.lineChEdit_denom.text()
+        line_ch_li = (line_ch_numer, line_ch_denom)
+        frame_tgt = int(self.frameTgtEdit.text())
+        num_frames = 1
+
+        camera_dict_ratio = calc_ratio(shot_no, line_ch_li, frame_tgt, num_frames, flg_rot=True)
+        data = camera_dict_ratio['data']
+
+        frames, height, width = data.shape
+        print(data[0,int(height/2),int(width/2)])
+        print(data.min())
+        print(data.max())
+        print(np.median(data))
+        # data = (data - data.min()) / (np.median(data) - data.min()) * 255
+        data = data / data[0,int(height/2),int(width/2)] * 255
+        
+        data = data.astype(np.uint8)
+        qimg = QImage(data.data, width, height, width, QImage.Format_Grayscale8)
+        pixmap = QPixmap.fromImage(qimg)
+        self.imageLabel.setPixmap(pixmap)        
 
     def loadConfig(self):
         shot_no = int(self.shotNoEdit.text())
