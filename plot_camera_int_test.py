@@ -10,7 +10,7 @@ from calc_int import calc_int
 # import hampel_filter
 
 
-def plot_camera_int_frame(shot_no, line_ch, frame_tgt, num_frames):
+def plot_camera_int_frame(shot_no, line_ch, frame_tgt, num_frames, vmin, vmax):
     camera_dict_int = calc_int(shot_no, line_ch, frame_tgt, num_frames)
     
     dir_out = os.path.join(camera_dict_int['result_dir'], 'int', str(shot_no) + '_ch' + str(line_ch))
@@ -45,7 +45,7 @@ def plot_camera_int_frame(shot_no, line_ch, frame_tgt, num_frames):
         ax = fig.add_subplot(1,1,1)
         
         # Draw the figure
-        ax_img = ax.imshow(img, extent=[zaxis[0], zaxis[-1], xaxis[-1], xaxis[0]], vmax=ymax, vmin=0, cmap='jet')
+        ax_img = ax.imshow(img, extent=[zaxis[0], zaxis[-1], xaxis[-1], xaxis[0]], vmin=vmin, vmax=vmax, cmap='jet')
         
         # Color bar
         divider = mpl_toolkits.axes_grid1.make_axes_locatable(ax)

@@ -10,7 +10,7 @@ from calc_avg import calc_avg
 # import hampel_filter
 
 
-def plot_camera_avg_frame(shot_no, line_ch, frame_tgt, num_frames, vmin, vmax, avg_time):
+def plot_camera_ratio_avg(shot_no, line_ch, frame_tgt, num_frames, vmin, vmax, avg_time):
     camera_dict_ratio_avg = calc_avg(shot_no, line_ch, frame_tgt, num_frames, avg_time)
     
     dir_out = os.path.join(camera_dict_ratio_avg['result_dir'], 'ratio', str(shot_no) + '_ch' + str(line_ch[0]) + '_over_ch' + str(line_ch[1]) + '_avg_' + str(avg_time))
@@ -103,7 +103,7 @@ if __name__ == "__main__":
     # line_ch_li = [('4', '1')]; (vmin,vmax) = (0,0.15)
     for shot_no in shot_li:
         for line_ch in line_ch_li:
-            plot_camera_avg_frame(shot_no, line_ch, frame_tgt, num_frames, vmin, vmax, avg_time)
+            plot_camera_ratio_avg(shot_no, line_ch, frame_tgt, num_frames, vmin, vmax, avg_time)
     time_end = time.time()
     print('Time spent: ' + str(time_end-time_sta) + ' (s)')
     #print(camera_dict['frame_rate'])
