@@ -4,8 +4,9 @@ import os
 
 def read_config_info():
     try:
+        config_file = "camera_config_custom.ini" if os.path.exists("camera_config_custom.ini") else "camera_config.ini"
         config_ini = configparser.ConfigParser()
-        config_ini.read('camera_config.ini', encoding='utf-8')
+        config_ini.read(config_file, encoding='utf-8')
         config_dict = {'data_dir': config_ini['Paths']['data_dir'],
                        'tiff_dir': config_ini['Paths']['tiff_dir'],
                        'module_dir': config_ini['Paths']['module_dir'],
