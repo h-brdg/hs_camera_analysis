@@ -39,21 +39,27 @@ pip install -r requirements.txt
     pip install -r requirements.txt
     ```
 
-3. Configure camera_config.ini, trim_info.custom.ini and coeff_info.ini
-
-4. (Optional) Run the crop-adjustment-aiding script to configure trim_info.custom.ini :
+3. Configure camera_config.ini (or camera_config_custom.ini,),
+   
+4. To zip the directory containing tiff files and a txt file, run :
     ```bash
-    python adjust_trim_info.py
+    python gui_tiff2zip.py
+    ```
+5. Configure trim_info.custom.ini and coeff_info.ini
+
+6. (Optional) Run the crop-adjustment-aiding script to configure trim_info_custom.ini :
+    ```bash
+    python gui_adjust_trim_info.py
     ```
 
-5. Run the gui plotting script:
+7. Run the gui plotting script:
     ```bash
-    python plot_gui.py
+    python gui_plot.py
     ```
 
 ## Scripts
-- `adjust_trim_info.py`: Script for checking the trimming information.
-- `plot_gui.py`: Main Script for analyzing and visualizing the high-speed camera data.
+- `gui_adjust_trim_info.py`: Script for checking the trimming information.
+- `gui_plot.py`: Main Script for analyzing and visualizing the high-speed camera data.
 
 ## Contributing
 We welcome contributions to improve the scripts and add new features. Please fork the repository and submit your pull requests.
