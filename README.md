@@ -60,3 +60,6 @@ We welcome contributions to improve the scripts and add new features. Please for
 
 ## License
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+
+## Acknowledgements
+The initial idea of this repository was based on scripts by A. Terakado and T. Hamada.
