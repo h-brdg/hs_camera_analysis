@@ -155,7 +155,7 @@ class PlotCameraFrameGUI(QWidget):
         if function_name == "plot_camera_int_frame":
             plot_camera_int_frame(shot_no, line_ch, frame_tgt, num_frames, vmin, vmax)
         elif function_name == "plot_camera_int_avg":
-            plot_camera_int_avg(shot_no, line_ch, frame_tgt, num_frames, vmin, vmax, avg_time)
+            plot_camera_int_avg(shot_no, line_ch, frame_tgt, num_frames, avg_time)
         elif function_name == "plot_camera_ratio_frame":
             plot_camera_ratio_frame(shot_no, line_ch, frame_tgt, num_frames, vmin, vmax)
         elif function_name == "plot_camera_ratio_avg":
