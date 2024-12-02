@@ -27,7 +27,7 @@ def read_trim_info(shot_no, line_type, tiff_dir):
             ini_file = 'trim_info.ini'
             trim_ini.read(ini_file, encoding='utf-8')
             # print('No section in trim_info_custom.ini for this shot. Reading the default values from trim_info.ini')
-        else:
+        # else:
             # print('Reading from trim_info_custom.ini')
 
         
